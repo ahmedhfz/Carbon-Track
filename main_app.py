@@ -379,7 +379,7 @@ st.markdown("""
         text-decoration: none;
         color: white;
         font-weight: bold;
-        padding: 8px 12px;
+        padding: 9px 10px;
         border-radius: 5px;
         transition: background-color 0.3s;
         font-size: 14px;
@@ -402,4 +402,8 @@ st.markdown("""
         <a href="https://www.linkedin.com/in/ahmedhfz/" target="_blank" class="linkedin">LinkedIn</a>
         <a href="https://github.com/ahmedhfz" target="_blank" class="github">GitHub</a>
     </div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<span style="color:#1e4466; font-size:18px;">**Feedback**</span> ➤ **atakan.hfz@hotmail.com** 📧  
 """, unsafe_allow_html=True)
