@@ -408,7 +408,7 @@ st.write("")
 st.write("")
 st.write("")
 st.write("")
-st.write("")
+
 
 st.markdown("""
 <span style="color:#1e4466; font-size:18px;">**Feedback**</span> ➤ **atakan.hfz@hotmail.com** 📧  
