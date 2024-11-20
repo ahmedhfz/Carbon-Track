@@ -370,7 +370,7 @@ st.markdown("""
     <style>
     .social-icons {
         position: absolute;
-        top: 20px; 
+        top: px; 
         right: 20px;
         display: flex;
         gap: 10px;
@@ -403,6 +403,12 @@ st.markdown("""
         <a href="https://github.com/ahmedhfz" target="_blank" class="github">GitHub</a>
     </div>
 """, unsafe_allow_html=True)
+
+st.write("")
+st.write("")
+st.write("")
+st.write("")
+st.write("")
 
 st.markdown("""
 <span style="color:#1e4466; font-size:18px;">**Feedback**</span> ➤ **atakan.hfz@hotmail.com** 📧  
