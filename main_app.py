@@ -363,8 +363,12 @@ if st.button("Calculate"):
         </div>
     """, unsafe_allow_html=True)
 
+st.write("")
+st.write("")
+st.write("")
 
 
+st
 # Github and Linkedin Connections
 st.markdown("""
     <style>
