@@ -367,8 +367,6 @@ st.write("")
 st.write("")
 st.write("")
 
-
-st
 # Github and Linkedin Connections
 st.markdown("""
     <style>
