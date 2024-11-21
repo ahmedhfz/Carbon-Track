@@ -7,7 +7,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import r2_score
 import joblib
 
-data = pd.read_csv("organized_carbon.csv")
+data = pd.read_csv("my_dataset/organized_carbon.csv")
 
 X = data.drop(columns= ["CarbonEmission"])
 y = data["CarbonEmission"]
@@ -18,7 +18,6 @@ xgb_model= xgb.XGBRegressor(n_estimators= 450,learning_rate = 0.15,max_depth=3,r
 xgb_model.fit(X_train,y_train)
 
 from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import cross_val_score
 import numpy as np
 from sklearn.metrics import r2_score
 
