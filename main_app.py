@@ -204,14 +204,14 @@ ordinal_data_info = {
         "number input": "",
         'description': "How much do you spend on groceries each month? (Enter amount in currency)"
     },
-    'Waste Bag Size': {
-        'options': ['small', 'medium', 'large', 'extra large'],
-        'description': "What size of plastic bag do you use?"
-    },
     "Waste Bag Weekly Count": {
         "number input": "",
         'description': "How many plastic bags do you use weekly?"
     },
+    # 'Waste Bag Size': {
+    #     'options': ['small', 'medium', 'large', 'extra large'],
+    #     'description': "What size of plastic bag do you use?"
+    # },
     'How Long TV PC Daily Hour': {
         "number input": "",
         'description': "How many hours do you spend in front of a TV or PC each day? (Enter hours)"
@@ -343,6 +343,15 @@ for category, info in ordinal_data_info.items():
                 st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
                 amount = int(st.number_input("", step=1, key=f"{category}_amount"))  # Benzersiz key
                 user_info[category] = int(amount // currencies[parity])
+            elif category == "Waste Bag Weekly Count":
+                st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
+                user_info[category]= int(st.number_input("", step=1, key=f"{category}_amount"))
+                if user_info[category] > 0:
+                    st.markdown(f'<div class="description">"What size of plastic bag do you use?"</div>', unsafe_allow_html=True,)
+                    user_info["Waste Bag Size"] = st.radio("",['small', 'medium', 'large', 'extra large'])
+                else:
+                    user_info["Waste Bag Size"] = "None"
+                      
             else:
                 st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
                 user_info[category] = st.number_input("", step=1, key=f"{category}_input")  # Benzersiz key

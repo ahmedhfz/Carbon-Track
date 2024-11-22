@@ -20,7 +20,7 @@ def organizer(data):
         'Vehicle Type': ['None', 'electric', 'hybrid', 'lpg', 'petrol', 'diesel'],
         'Social Activity': ['never', 'sometimes', 'often'],
         'Frequency of Traveling by Air': ['never', 'rarely', 'frequently', 'very frequently'],
-        'Waste Bag Size': ['small', 'medium', 'large', 'extra large'],
+        'Waste Bag Size': ["None",'small', 'medium', 'large', 'extra large'],
         'Energy efficiency': ['Yes', 'Sometimes', 'No']
     }
 
