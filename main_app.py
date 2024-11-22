@@ -208,10 +208,6 @@ ordinal_data_info = {
         "number input": "",
         'description': "How many plastic bags do you use weekly?"
     },
-    # 'Waste Bag Size': {
-    #     'options': ['small', 'medium', 'large', 'extra large'],
-    #     'description': "What size of plastic bag do you use?"
-    # },
     'How Long TV PC Daily Hour': {
         "number input": "",
         'description': "How many hours do you spend in front of a TV or PC each day? (Enter hours)"
@@ -351,7 +347,6 @@ for category, info in ordinal_data_info.items():
                     user_info["Waste Bag Size"] = st.radio("",['small', 'medium', 'large', 'extra large'])
                 else:
                     user_info["Waste Bag Size"] = "None"
-                      
             else:
                 st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
                 user_info[category] = st.number_input("", step=1, key=f"{category}_input")  # Benzersiz key
