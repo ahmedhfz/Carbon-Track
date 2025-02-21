@@ -2,12 +2,13 @@ import joblib
 import pandas as pd
 import streamlit as st
 from data_organizing_func import organizer
+import altair as alt
 
 # Web Design
 st.set_page_config(
-    page_title="CarbonTrack", 
-    page_icon="🌿",  
-    layout="centered",  
+    page_title="CarbonTrack",
+    page_icon="🌿",
+    layout="centered",
 )
 @st.cache_data
 def get_custom_css():
@@ -156,7 +157,7 @@ def get_custom_css():
             color: #1b5e20; /* Çarpı rengini yeşil yap */
         }
         </style>
-    """   
+    """
 
 st.markdown(get_custom_css(), unsafe_allow_html=True)
 
@@ -166,8 +167,8 @@ st.markdown("""
     <div class="info-card">
         <h3>How does this calculator work?</h3>
         <p>
-            This tool helps you estimate your yearly carbon emissions based on your daily habits, 
-            including transport, diet, and energy consumption. Make environmentally conscious choices 
+            This tool helps you estimate your yearly carbon emissions based on your daily habits,
+            including transport, diet, and energy consumption. Make environmentally conscious choices
             and reduce your impact on the planet.
         </p>
     </div>
@@ -259,7 +260,7 @@ user_info = {
     "Cooking_With": "",
 }
 
-currencies = {"Dolar":1,"Turkish Lira": 34.50,"Euro":0.95} 
+currencies = {"Dolar":1,"Turkish Lira": 36.5,"Euro":0.95}
 
 st.markdown(
     """
@@ -302,32 +303,32 @@ for category, info in ordinal_data_info.items():
     if category == "Transport":
         st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
         user_info[category] = st.radio("", options=info['options'], key=f"{category}_radio",label_visibility="collapsed")
-        
+
         # Selecting the public or walk/bicycle option indicates the person does not own a personal vehicle.
         if user_info[category] == "private":
             st.markdown('<div class="description">What type of vehicle do you use?</div>', unsafe_allow_html=True)
             user_info['Vehicle Type'] = st.radio(
-                "", 
+                "",
                 options=['electric', 'hybrid', 'lpg', 'petrol', 'diesel'],
                 key="vehicle_type_radio",
                 label_visibility="collapsed"
             )
         else:
             user_info['Vehicle Type'] = None
-            
+
         # Distance traveled by walking or cycling does not affect carbon emissions.
         if user_info[category] in ["public", "private"]:
             st.markdown('<div class="description">How much do you travel in a month (km)?</div>', unsafe_allow_html=True)
             user_info["Vehicle Monthly Distance Km"] = int(st.number_input("", min_value=5, max_value=9999, key="vehicle_distance_input",))
         else:
             user_info['Vehicle Monthly Distance Km'] = 0
-    
+
     else:
         # Seperate each category that contains options, slider, multi-select or number input
         if 'options' in info:
             st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
             user_info[category] = st.radio("", options=info['options'], key=f"{category}_radio")
-            
+
         elif "multi select" in info:
             st.markdown(f'<div class="description">{info["description"]}</div>', unsafe_allow_html=True,)
             user_info[category] = str(st.multiselect("", info["multi select"], key=f"{category}_amount"))
@@ -356,16 +357,50 @@ for category, info in ordinal_data_info.items():
 def load_model():
     return joblib.load("final_xgb_model.pkl")
 
+carbon_data = {
+    "World": 4.3,
+    "Türkiye": 4.5,
+    "Europe": 6.8,
+    "USA": 14.5
+}
+
+if "prediction" not in st.session_state:
+    st.session_state.prediction = None
+
 if st.button("Calculate"):
     user_info_df = pd.DataFrame([user_info])
     organized = organizer(user_info_df)
     model = load_model()
-    prediction = model.predict(organized)
+    prediction_kg = model.predict(organized)[0]
+    prediction_ton = prediction_kg / 1000
+    st.session_state.prediction = prediction_ton
+
     st.markdown(f"""
         <div class="result-box">
-            Your estimated yearly carbon emission is <span class="result-highlight">{prediction[0]:.2f} kg CO₂</span>.
+            Your estimated yearly carbon emission is <span class="result-highlight">{prediction_kg:.2f} kg CO₂</span>.
         </div>
     """, unsafe_allow_html=True)
+
+if st.button("Compare With Rest of The World"):
+    if st.session_state.prediction is None:
+        st.warning("Please calculate your emission first!")
+    else:
+        carbon_data["Your Emission"] = st.session_state.prediction
+        df = pd.DataFrame(list(carbon_data.items()), columns=["Region", "Carbon Footprint"])
+        df = df.sort_values(by="Carbon Footprint", ascending=True)  # Küçükten büyüğe sırala
+
+        # Altair ile sıralı bar chart oluştur
+        chart = alt.Chart(df).mark_bar().encode(
+            x=alt.X("Carbon Footprint:Q", title="Carbon Footprint (tons)"),
+            y=alt.Y("Region:N", sort="-x", title="Region"),
+            color=alt.Color("Region:N", legend=None)
+        ).properties(
+            width=600,
+            height=400,
+            title="Carbon Footprint Comparison"
+        )
+
+        st.altair_chart(chart, use_container_width=True)
 
 st.write("")
 st.write("")
@@ -376,7 +411,7 @@ st.markdown("""
     <style>
     .social-icons {
         position: absolute;
-        top: px; 
+        top: px;
         right: 20px;
         display: flex;
         gap: 10px;
@@ -416,5 +451,5 @@ st.write("")
 
 
 st.markdown("""
-<span style="color:#1e4466; font-size:18px;">**Feedback**</span> ➤ **atakan.hfz@hotmail.com** 📧  
+<span style="color:#1e4466; font-size:18px;">**Feedback**</span> ➤ **atakan.hfz@hotmail.com** 📧
 """, unsafe_allow_html=True)

@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Enviroment
-carbon1_venv/
+carbon_venv/
 
 # Jupyter Notebooks
 *.ipynb
